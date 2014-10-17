@@ -2,21 +2,49 @@
 #include <stdlib.h>
 #define N 10
 
-char automate[N][N];
+char automate[N+1][N+1];
+
+
+
+/********************************************************************************************************/
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$ INITIALISATION AVEC OU SANS FICHIER $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+/********************************************************************************************************/
+
 
 /*Initialise l'automate ave que des cellules mortes*/
-void Init_automate(char automate[N][N]){
+void Init_automate_mort(char automate[N+1][N+1]){
 	int i, j;
-	for(i=0; i<N; i++){
-		for(j=0; j<N; j++){
+	for(i=1; i<N; i++){
+		for(j=1; j<N; j++){
 			automate[i][j]=' ';
 		}
 	}
 }
 
+/* Initialise la matrice de l'automate depuis des coordonnées ecris dans un fichier*/
+void Init_automate_fichier(char automate[N+1][N+1]) { 
+	int ligne, colonne;
+	FILE *fic;
+	char nom_fichier[20];
+
+	printf("A partir de quel fichier voulez vous initialiser l'automate cellulaire ? : ");
+	scanf("%s", nom_fichier);
+	fic = fopen(nom_fichier, "r");
+	fscanf(fic, "%i%i", &ligne, &colonne);
+	while(!feof(fic)){
+		fscanf(fic,"%i%i", &ligne, &colonne);
+		automate[ligne][colonne]='*';
+	}
+	fclose(fic);
+}
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+
+
+
+/*********************************************************************************************************/
 /*$$$$$$$$$$$$$$$$$$$$$ LIRE OU ECRIRE DES COORDNNEES D'UNE MATRICE DANS UN FICHIER $$$$$$$$$$$$$$$$$$$$$*/
-/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+/*********************************************************************************************************/
+
 
 /*Ecrit les coordonnées de l'automate dans un fichier choisi*/
 void Ecrire_coord_automate(void){ //nbr de lignes a lire
@@ -37,53 +65,34 @@ void Ecrire_coord_automate(void){ //nbr de lignes a lire
 		fprintf(fic, "%i %i", x, y);
 	}
 	fclose(fic);
+	printf("Nous avons bien pris vos coordonnées en compte , Merci.\n");
 }
-
-/* Permet de lire les coordonnées ecrit dans le fichier et rempli la matrice automate */
-void Lire_coord_automate(void){
-	FILE *fic;
-	char nom_fichier[20];
-	int i, j, nbr_coord, ligne, colonne;
-	
-	printf("Quel est le nom du fichier que vous voulez lire ? ");
-	scanf("%s", nom_fichier);
-	
-	printf("\ncombien de coordonnées voulez vous lire ? :");
-	scanf("%i", &nbr_coord);
-
-	fic=fopen(nom_fichier, "r");
-	for(i=0; i < nbr_coord; i++){
-		fscanf(fic, "%i %i", &ligne, &colonne);
-		automate[ligne][colonne]='*';
-	}	
-	fclose(fic);
-}
-/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
-/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
-
-
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+
+
+
+/**********************************************************************************************************/
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ AFFICHAGE OU ECRITURE DE LA MATRICE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
-/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+/**********************************************************************************************************/
+
 
 /* Affiche une bordure pour afficher l'automate */
 void Afficher_bordure(void){
-	int i, j;
+	int i;
 	printf("+");
-	for(i=0; i<N; i++){
+	for(i=1; i<N; i++){
 		printf("---+");
 	}
 	printf("\n");
 }
 
-
 /* Affiche la matrice automate */
-void Afficher_automate(char automate[N][N]){
+void Afficher_automate(char automate[N+1][N+1]){
 	int i, j;
 	Afficher_bordure();
-	for(i=0; i<N; i++){
+	for(i=1; i<N; i++){
 		printf("|");
-		for(j=0; j<N; j++){
+		for(j=1; j<N; j++){
 			printf(" %c |", automate[i][j]);
 		}
 		printf("\n");
@@ -93,16 +102,16 @@ void Afficher_automate(char automate[N][N]){
 
 /* Ecrit une bordure dans le fichier fic */
 void Ecrire_bordure(FILE *fic){  //fic est le fichier d'ecriture en supposant qu'il est DEJA OUVERT
-	int i, j;
+	int i;
 	fprintf(fic, "+");
-	for(i=0; i<N; i++){
+	for(i=1; i<N; i++){
 		fprintf(fic, "---+");
 	}
 	fprintf(fic, "\n");
 }
 
 /* Ecrit le contenu de la matrice dans le fichier fic */
-void Ecrire_automate(char automate[N][N]){
+void Ecrire_automate(char automate[N+1][N+1]){
 	int i, j;
 	FILE *fic;
 	char nom_fichier[20];
@@ -112,9 +121,9 @@ void Ecrire_automate(char automate[N][N]){
 	fic=fopen(nom_fichier, "w");
 
 	Ecrire_bordure(fic);
-	for(i=0; i<N; i++){
+	for(i=1; i<N; i++){
 		fprintf(fic, "|");
-		for(j=0; j<N; j++){
+		for(j=1; j<N; j++){
 			fprintf(fic, " %c |", automate[i][j]);
 		}
 		fprintf(fic, "\n");
@@ -122,8 +131,6 @@ void Ecrire_automate(char automate[N][N]){
 	}
 	fclose(fic);
 }
-
-/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 /*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
 
 
@@ -131,23 +138,26 @@ void Ecrire_automate(char automate[N][N]){
 int main(){
 	int choix=-1; 
 	
-	printf("			MENU					\n\n");
-	printf("	1. Initialiser l'automate				\n");
-	printf("	2. Ecrire les coordonnees des cellules vivantes		\n");
-	printf("	3. Lire les coordonnees des cellules vivantes		\n");
-	printf("	4. Afficher l'automate cellulaire 			\n");
-	printf("	5. Ecrire l'automate cellulaire dans un fichier		\n");
-	printf("	6. QUITTER						\n");
+	printf("			MENU					\n\n\n\n");
+	printf("	1. Initialiser l'automate				\n\n");
+	printf("	2. Ecrire les coordonnees des cellules vivantes		\n\n");
+	printf("	3. Lire les coordonnees des cellules vivantes		\n\n");
+	printf("	4. Afficher l'automate cellulaire 			\n\n");
+	printf("	5. Ecrire l'automate cellulaire dans un fichier		\n\n");
+	printf("	6. Afficher l'automate après plusieurs générations	    ");
+	printf("\n	 	(en cours de programmation)			\n\n\n");	
+	printf("	10. QUITTER						\n\n");
 	
 	scanf("%i", &choix);
 	while(	choix != 6){
 		switch(choix){
-				case 1: Init_automate(automate); break;
+				case 1: Init_automate_mort(automate); break;
 				case 2: Ecrire_coord_automate(); break; 
-				case 3: Lire_coord_automate(); break;
+				case 3: Init_automate_fichier(automate); break;
 				case 4: Afficher_automate(automate); break;
 				case 5: Ecrire_automate(automate); break;
-				case 6: return 0; break;
+				case 6: Afficher_automate(automate); break;
+				case 10: return 0; break;
 		}
 		scanf("%i", &choix);
 	}
