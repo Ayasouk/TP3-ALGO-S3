@@ -1,7 +1,7 @@
 TP3-ALGO-S3
 ===========
 
-#SUJET DU TP : 
+##SUJET DU TP : 
 
 Un automate cellulaire est constitué d'un ensemble de cellules qui évoquent par générations successives. 
 On reprèsente un automate cellulaire par une grille NxN dont chaque case est occupée soit par une cellule vivante, 
@@ -45,11 +45,11 @@ Les règles d'évolution sont les suivantes :
 _ Ecrire un programme qui initialise un automate cellulaire à partir d'un fichier texte puis affiche les X premieres generations
 de l'automate.
 
-##Mise en Oevre :
+####Mise en Oevre :
 -    le fichier d'Initialisation, supposé sans erreurs, contient une séquence d'entiers qui reprèsentent les coordonnées des 
 	cellules vivantes de la première génération .
 
-	#### Par exemple, le fichier :
+	##### Par exemple, le fichier :
 			1 8 2 3 6 4
 	reprèsente une grille contenant trois cellules vivantes de coordonnées (1,8)(2,3) et (6,4).
 
